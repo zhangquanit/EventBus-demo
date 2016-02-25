@@ -40,19 +40,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //-----------------------注册事件 START-------------------
     @Subscribe(threadMode=ThreadMode.MAIN)
     public void onItemEvent(Item item) {
-        Log.d(TAG, "MainActivity onEventMainThread: "+item.content);
+        Log.d(TAG, "MainActivity onEventMainThread: "+item.content+"  curThread="+Thread.currentThread().getName());
     }
     @Subscribe(threadMode=ThreadMode.POSTING)
     public void onEventPostThread(Item item) {
-        Log.d(TAG, "MainActivity onEventPostThread: "+item.content);
+        Log.d(TAG, "MainActivity onEventPostThread: "+item.content+"  curThread="+Thread.currentThread().getName());
     }
     @Subscribe(threadMode=ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(Item item) {
-        Log.d(TAG, "MainActivity onEventBackgroundThread: "+item.content);
+        Log.d(TAG, "MainActivity onEventBackgroundThread: "+item.content+"  curThread="+Thread.currentThread().getName());
     }
     @Subscribe(threadMode=ThreadMode.ASYNC)
     public void onEventAsync(Item item) {
-        Log.d(TAG, "MainActivity onEventAsync: "+item.content);
+        Log.d(TAG, "MainActivity onEventAsync: "+item.content+"  curThread="+Thread.currentThread().getName());
     }
 
     //-----------------------注册事件 END-------------------
@@ -60,10 +60,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_mainThread:
-                EventBus.getDefault().post(new Item("from MainActivity  MainThread"));
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "post:  curThread="+Thread.currentThread().getName());
+                        EventBus.getDefault().post(new Item("from MainActivity  MainThread"));
+                    }
+                }).start();
+
                 break;
             case R.id.btn_postThread:
-                EventBus.getDefault().post(new Item("from MainActivity  PostThread"));
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "post:  curThread="+Thread.currentThread().getName());
+                        EventBus.getDefault().post(new Item("from MainActivity  PostThread"));
+                    }
+                }).start();
                 break;
             case R.id.btn_backgroundThread:
                 EventBus.getDefault().post(new Item("from MainActivity  BackgroundThread"));

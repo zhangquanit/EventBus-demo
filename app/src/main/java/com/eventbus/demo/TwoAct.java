@@ -32,19 +32,19 @@ public class TwoAct extends Activity implements View.OnClickListener{
     //-----------------------注册事件 START-------------------
     @Subscribe(threadMode= ThreadMode.MAIN)
     public void onEventMainThread(Item item) {
-        Log.d(TAG, "TwoAct onEventMainThread: "+item.content);
+        Log.d(TAG, "TwoAct onEventMainThread: "+item.content+"  curThread="+Thread.currentThread().getName());
     }
     @Subscribe(threadMode=ThreadMode.POSTING)
     public void onEventPostThread(Item item) {
-        Log.d(TAG, "TwoAct onEventPostThread: "+item.content);
+        Log.d(TAG, "TwoAct onEventPostThread: "+item.content+"  curThread="+Thread.currentThread().getName());
     }
     @Subscribe(threadMode=ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(Item item) {
-        Log.d(TAG, "TwoAct onEventBackgroundThread: "+item.content);
+        Log.d(TAG, "TwoAct onEventBackgroundThread: "+item.content+"  curThread="+Thread.currentThread().getName());
     }
     @Subscribe(threadMode=ThreadMode.ASYNC)
     public void onEventAsync(Item item) {
-        Log.d(TAG, "TwoAct onEventAsync: "+item.content);
+        Log.d(TAG, "TwoAct onEventAsync: "+item.content+"  curThread="+Thread.currentThread().getName());
     }
     //-----------------------注册事件 END-------------------
 
@@ -52,16 +52,29 @@ public class TwoAct extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_mainThread:
-                EventBus.getDefault().post(new Item("from TwoAct MainThread"));
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "post:  curThread="+Thread.currentThread().getName());
+                        EventBus.getDefault().post(new Item("from MainActivity  MainThread"));
+                    }
+                }).start();
+
                 break;
             case R.id.btn_postThread:
-                EventBus.getDefault().post(new Item("from TwoAct PostThread"));
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "post:  curThread="+Thread.currentThread().getName());
+                        EventBus.getDefault().post(new Item("from MainActivity  PostThread"));
+                    }
+                }).start();
                 break;
             case R.id.btn_backgroundThread:
-                EventBus.getDefault().post(new Item("from TwoAct BackgroundThread"));
+                EventBus.getDefault().post(new Item("from MainActivity  BackgroundThread"));
                 break;
             case R.id.btn_Async:
-                EventBus.getDefault().post(new Item("from TwoAct Async"));
+                EventBus.getDefault().post(new Item("from MainActivity  Async"));
                 break;
         }
     }

@@ -15,9 +15,6 @@
  */
 package org.greenrobot.eventbus.meta;
 
-import android.annotation.TargetApi;
-import android.os.Build;
-
 import org.greenrobot.eventbus.EventBusException;
 import org.greenrobot.eventbus.SubscriberMethod;
 import org.greenrobot.eventbus.ThreadMode;
@@ -42,7 +39,6 @@ public abstract class AbstractSubscriberInfo implements SubscriberInfo {
         return subscriberClass;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public SubscriberInfo getSuperSubscriberInfo() {
         if(superSubscriberInfoClass == null) {
