@@ -1,5 +1,9 @@
 package com.eventbus.demo.event;
 
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,16 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
-
 public class EventBus2
 {
 
 	private Handler mHandler;
 
-	private static EventBus2 EventBus2 = new EventBus2();
+	private static EventBus2 eventBus = new EventBus2();
 
 	/*
 	 * 我们的强大的map，存储我们的方法
@@ -34,7 +34,7 @@ public class EventBus2
 
 	public static EventBus2 getInstatnce()
 	{
-		return EventBus2;
+		return eventBus;
 	}
 
 	private EventBus2()
