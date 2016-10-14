@@ -31,10 +31,10 @@ public class TwoAct extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_mainThread:
+            case R.id.btn_mainThread://主线程中发送事件
                 EventBus.getDefault().post(new Item("[from TwoAct  MainThread]"));
                 break;
-            case R.id.btn_postThread:
+            case R.id.btn_postThread: //子线程中发送事件
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -43,11 +43,11 @@ public class TwoAct extends Activity implements View.OnClickListener {
                     }
                 }).start();
                 break;
-            case R.id.btn_eventInheritance:
+            case R.id.btn_eventInheritance: //事件继承
                 EventBus.getDefault().post(new Item("[from TwoAct，eventInheritance->Item]"));
 //                EventBus.getDefault().post(new ItemTwo("[from TwoAct，eventInheritance->ItemTwo]"));
                 break;
-            case R.id.btn_action:
+            case R.id.btn_action:  //事件动作
                 EventBus.getDefault().post(new PostEvent(EventAction.ACTION));
 //                EventBus.getDefault().post(new PostEvent(EventAction.ACTION2));
                 break;

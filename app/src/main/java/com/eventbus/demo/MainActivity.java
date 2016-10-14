@@ -78,22 +78,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     //-----------------------ThreadModel-------------------
-//    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 0)
-//    public void onEventMain(Item item) {
-//        Log.d(TAG, "MainActivity onEventMain: " + item.content + "  curThread=" + Thread.currentThread().getName());
-//    }
-//    @Subscribe(threadMode = ThreadMode.POSTING)
-//    public void onEventPostThread(Item item) {
-//        Log.d(TAG, "MainActivity onEventPostThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
-//    }
-//    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-//    public void onEventBackgroundThread(Item item) {
-//        Log.d(TAG, "MainActivity onEventBackgroundThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
-//    }
-//    @Subscribe(threadMode = ThreadMode.ASYNC)
-//    public void onEventAsync(Item item) {
-//        Log.d(TAG, "MainActivity onEventAsync: " + item.content + "  curThread=" + Thread.currentThread().getName());
-//    }
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 0)
+    public void onEventMain(Item item) {
+        Log.d(TAG, "MainActivity onEventMain: " + item.content + "  curThread=" + Thread.currentThread().getName());
+    }
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onEventPostThread(Item item) {
+        Log.d(TAG, "MainActivity onEventPostThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
+    }
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onEventBackgroundThread(Item item) {
+        Log.d(TAG, "MainActivity onEventBackgroundThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
+    }
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public void onEventAsync(Item item) {
+        Log.d(TAG, "MainActivity onEventAsync: " + item.content + "  curThread=" + Thread.currentThread().getName());
+    }
 
     //-----------------------事件Action-------------------
 
