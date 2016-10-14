@@ -34,7 +34,7 @@ public class EventBusBuilder {
     boolean sendSubscriberExceptionEvent = true;
     boolean sendNoSubscriberEvent = true;
     boolean throwSubscriberException;
-    boolean eventInheritance = true;
+    boolean eventInheritance = true; //事件继承，默认为true 发送事件的父类，或实现的接口，只要注册了，都能接收到
     boolean ignoreGeneratedIndex;
     boolean strictMethodVerification;
     ExecutorService executorService = DEFAULT_EXECUTOR_SERVICE;

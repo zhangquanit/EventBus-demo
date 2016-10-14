@@ -10,41 +10,9 @@
     tools:context="com.eventbus.demo.MainActivity"
     android:orientation="vertical"
     >
-
-    <Button
-        android:id="@+id/btn_mainThread"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="onEventMainThread" />
-    <Button
-        android:id="@+id/btn_postThread"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="onEventPostThread" />
-    <Button
-        android:id="@+id/btn_backgroundThread"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="onEventBackgroundThread" />
-    <Button
-        android:id="@+id/btn_Async"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="onEventAsync" />
-
-
     <Button
         android:id="@+id/btn_Act"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="start TwoAct" />
-    <TextView
-        android:id="@+id/result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textSize="20sp"
-        android:layout_marginTop="20dp"
-        android:textColor="#a90b28"
-        />
 </LinearLayout>

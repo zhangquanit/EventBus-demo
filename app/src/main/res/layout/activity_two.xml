@@ -15,37 +15,22 @@
         android:id="@+id/btn_mainThread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="onEventMainThread" />
+        android:text="主线程发送事件" />
     <Button
         android:id="@+id/btn_postThread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="onEventPostThread" />
+        android:text="子线程中发送事件" />
     <Button
-        android:id="@+id/btn_backgroundThread"
+        android:id="@+id/btn_eventInheritance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="onEventBackgroundThread" />
+        android:text="事件继承" />
     <Button
-        android:id="@+id/btn_Async"
+        android:id="@+id/btn_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="onEventAsync" />
+        android:text="事件Action" />
 
 
-    <Button
-        android:id="@+id/btn_Act"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="start MyFragmentActivity" />
-    <TextView
-        android:id="@+id/result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textSize="20sp"
-        android:layout_marginTop="20dp"
-        android:textColor="#a90b28"
-        />
 </LinearLayout>

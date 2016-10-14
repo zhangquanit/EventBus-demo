@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.eventbus.demo.event.EventAction;
 import com.eventbus.demo.event.Item;
+import com.eventbus.demo.event.ItemInterface;
+import com.eventbus.demo.event.ItemTwo;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.eventbus.event.PostEvent;
@@ -30,46 +32,53 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.btn_mainThread).setOnClickListener(this);
-        findViewById(R.id.btn_postThread).setOnClickListener(this);
-        findViewById(R.id.btn_backgroundThread).setOnClickListener(this);
-        findViewById(R.id.btn_Async).setOnClickListener(this);
         findViewById(R.id.btn_Act).setOnClickListener(this);
 
         //测试Service里面的监听
-        startService(new Intent(this,MyService.class));
+//        startService(new Intent(this,MyService.class));
 
     }
 
-    //-----------------------注册事件 START-------------------
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 0)
-    public void onItemEvent(Item item) {
-        Log.d(TAG, "######MainActivity onEventMainThread: ================start");
-        for (int i = 0; i < 20000; i++) {
-            System.out.print(String.valueOf(i));
-        }
-        Log.d(TAG, "######MainActivity onEventMainThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
-        Log.d(TAG, "######MainActivity onEventMainThread: ================end");
+    //-----------------------事件继承-------------------
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventInheritance(Item item) {
+        Log.d(TAG, "MainActivity onEventInheritance: Item->" + item.content + "  curThread=" + Thread.currentThread().getName());
     }
-    @Subscribe(threadMode = ThreadMode.POSTING)
-    public void onEventPostThread(Item item) {
-        Log.d(TAG, "MainActivity onEventPostThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventInheritance2(ItemTwo item) {
+        Log.d(TAG, "MainActivity onEventInheritance2: ItemTwo->" + item.content + "  curThread=" + Thread.currentThread().getName());
     }
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onEventBackgroundThread(Item item) {
-        Log.d(TAG, "MainActivity onEventBackgroundThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventInheritance3(ItemInterface item) {
+        Log.d(TAG, "MainActivity onEventInheritance3: ItemInterface->  curThread=" + Thread.currentThread().getName());
     }
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onEventAsync(Item item) {
-        Log.d(TAG, "MainActivity onEventAsync: " + item.content + "  curThread=" + Thread.currentThread().getName());
-    }
-    private static final String ACTION="com.eventbus.demo.action";
-    private static final String ACTION2="com.eventbus.demo.action2";
-    @Subscribe(threadMode = ThreadMode.ASYNC,actions = {ACTION,ACTION2})
+
+    //-----------------------ThreadModel-------------------
+//    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true, priority = 0)
+//    public void onEventMain(Item item) {
+//        Log.d(TAG, "MainActivity onEventMain: " + item.content + "  curThread=" + Thread.currentThread().getName());
+//    }
+//    @Subscribe(threadMode = ThreadMode.POSTING)
+//    public void onEventPostThread(Item item) {
+//        Log.d(TAG, "MainActivity onEventPostThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
+//    }
+//    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+//    public void onEventBackgroundThread(Item item) {
+//        Log.d(TAG, "MainActivity onEventBackgroundThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
+//    }
+//    @Subscribe(threadMode = ThreadMode.ASYNC)
+//    public void onEventAsync(Item item) {
+//        Log.d(TAG, "MainActivity onEventAsync: " + item.content + "  curThread=" + Thread.currentThread().getName());
+//    }
+
+    //-----------------------事件Action-------------------
+
+    @Subscribe(threadMode = ThreadMode.ASYNC,actions = {EventAction.ACTION,EventAction.ACTION2})
     public void onEventAction(PostEvent item) {
         Log.d(TAG, "MainActivity onEventAction: [" + item.getAction() + "]  curThread=" + Thread.currentThread().getName());
     }
-    @Subscribe(threadMode = ThreadMode.ASYNC,actions = {ACTION2})
+    @Subscribe(threadMode = ThreadMode.ASYNC,actions = {EventAction.ACTION2})
     public void onEventAction2(PostEvent item) {
         Log.d(TAG, "MainActivity onEventAction2: [" + item.getAction() + "]  curThread=" + Thread.currentThread().getName());
     }
@@ -78,35 +87,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_mainThread:
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "post:  curThread=" + Thread.currentThread().getName());
-                        EventBus.getDefault().postSticky(new Item("from MainActivity  MainThread"));
-                        for (int i = 0; i < 10000; i++) {
-                            System.out.print(String.valueOf(i));
-                        }
-                        Log.d(TAG, "post ================end");
-                    }
-                }).start();
-
-                break;
-            case R.id.btn_postThread:
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "post:  curThread=" + Thread.currentThread().getName());
-                        EventBus.getDefault().post(new Item("from MainActivity  PostThread"));
-                    }
-                }).start();
-                break;
-            case R.id.btn_backgroundThread:
-                EventBus.getDefault().post(new PostEvent(ACTION));
-                break;
-            case R.id.btn_Async:
-                EventBus.getDefault().post(new PostEvent(ACTION2));
-                break;
             case R.id.btn_Act:
                 startActivity(new Intent(this, TwoAct.class));
                 break;

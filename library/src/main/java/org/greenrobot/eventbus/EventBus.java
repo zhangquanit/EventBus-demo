@@ -71,12 +71,13 @@ public class EventBus {
     private final SubscriberMethodFinder subscriberMethodFinder; //负责查找订阅类中的所有订阅方法
     private final ExecutorService executorService; //Executors.newCachedThreadPool();
 
-    private final boolean throwSubscriberException;
+    //日志记录、异常处理
+    private final boolean throwSubscriberException; //反射回调注册事件方法时[method.invoke(subscriber，event)]，是否抛出异常
     private final boolean logSubscriberExceptions;
     private final boolean logNoSubscriberMessages;
     private final boolean sendSubscriberExceptionEvent;
     private final boolean sendNoSubscriberEvent;
-    private final boolean eventInheritance;
+    private final boolean eventInheritance; //事件继承，默认为true
 
     private final int indexCount;
 
@@ -394,7 +395,7 @@ public class EventBus {
     private void postSingleEvent(Object event, PostingThreadState postingState) throws Error {
         Class<?> eventClass = event.getClass();
         boolean subscriptionFound = false;
-        if (eventInheritance) {
+        if (eventInheritance) { //发送的事件支持继承关系，比如EventTwo继承EventOne，如果现在发送的事件是EventTwo,则注册了EventOne事件的订阅者也能接收到。
             List<Class<?>> eventTypes = lookupAllEventTypes(eventClass);
             int countTypes = eventTypes.size();
             for (int h = 0; h < countTypes; h++) {

@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.eventbus.demo.event.EventAction;
 import com.eventbus.demo.event.Item;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import org.greenrobot.eventbus.event.PostEvent;
 
 /**
  * @author 张全
@@ -21,74 +21,37 @@ public class TwoAct extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_two);
-        findViewById(R.id.result).setVisibility(View.GONE);
         findViewById(R.id.btn_mainThread).setOnClickListener(this);
         findViewById(R.id.btn_postThread).setOnClickListener(this);
-        findViewById(R.id.btn_backgroundThread).setOnClickListener(this);
-        findViewById(R.id.btn_Async).setOnClickListener(this);
-        findViewById(R.id.btn_Act).setOnClickListener(this);
+        findViewById(R.id.btn_eventInheritance).setOnClickListener(this);
+        findViewById(R.id.btn_action).setOnClickListener(this);
 
-        EventBus.getDefault().register(this);
     }
-
-    //-----------------------注册事件 START-------------------
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(Item item) {
-        Log.d(TAG, "TwoAct onEventMainThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
-    }
-
-    @Subscribe(threadMode = ThreadMode.POSTING)
-    public void onEventPostThread(Item item) {
-        Log.d(TAG, "TwoAct onEventPostThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
-    }
-
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onEventBackgroundThread(Item item) {
-        Log.d(TAG, "TwoAct onEventBackgroundThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
-    }
-
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void onEventAsync(Item item) {
-        Log.d(TAG, "TwoAct onEventAsync: " + item.content + "  curThread=" + Thread.currentThread().getName());
-    }
-    //-----------------------注册事件 END-------------------
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_mainThread:
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "post:  curThread=" + Thread.currentThread().getName());
-                        EventBus.getDefault().postSticky(new Item("from TwoAct  MainThread"));
-                    }
-                }).start();
-
+                EventBus.getDefault().post(new Item("[from TwoAct  MainThread]"));
                 break;
             case R.id.btn_postThread:
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Log.d(TAG, "post:  curThread=" + Thread.currentThread().getName());
-                        EventBus.getDefault().post(new Item("from TwoAct  PostThread"));
+                        EventBus.getDefault().post(new Item("[from TwoAct  PostThread]"));
                     }
                 }).start();
                 break;
-            case R.id.btn_backgroundThread:
-                EventBus.getDefault().post(new Item("from TwoAct  BackgroundThread"));
+            case R.id.btn_eventInheritance:
+                EventBus.getDefault().post(new Item("[from TwoAct，eventInheritance->Item]"));
+//                EventBus.getDefault().post(new ItemTwo("[from TwoAct，eventInheritance->ItemTwo]"));
                 break;
-            case R.id.btn_Async:
-                EventBus.getDefault().post(new Item("from TwoAct  Async"));
-                break;
-            case R.id.btn_Act:
+            case R.id.btn_action:
+                EventBus.getDefault().post(new PostEvent(EventAction.ACTION));
+//                EventBus.getDefault().post(new PostEvent(EventAction.ACTION2));
                 break;
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
 }
