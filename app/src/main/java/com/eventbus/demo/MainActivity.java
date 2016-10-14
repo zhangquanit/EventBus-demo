@@ -1,6 +1,9 @@
 package com.eventbus.demo;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +40,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //测试Service里面的监听
 //        startService(new Intent(this,MyService.class));
 
+        BroadcastReceiver receiver= new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if(action.equals("action1")){
+
+                }else if(action.equals("action2")){
+
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("action1");
+        intentFilter.addAction("action2");
+        registerReceiver(receiver,intentFilter);
+
+
+        Intent intent = new Intent();
+        intent.setAction("action1");
+        sendBroadcast(intent);
     }
 
     //-----------------------事件继承-------------------
@@ -74,10 +97,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     //-----------------------事件Action-------------------
 
+    //监听多个动作
     @Subscribe(threadMode = ThreadMode.ASYNC,actions = {EventAction.ACTION,EventAction.ACTION2})
     public void onEventAction(PostEvent item) {
         Log.d(TAG, "MainActivity onEventAction: [" + item.getAction() + "]  curThread=" + Thread.currentThread().getName());
     }
+    //监听1个动作
     @Subscribe(threadMode = ThreadMode.ASYNC,actions = {EventAction.ACTION2})
     public void onEventAction2(PostEvent item) {
         Log.d(TAG, "MainActivity onEventAction2: [" + item.getAction() + "]  curThread=" + Thread.currentThread().getName());

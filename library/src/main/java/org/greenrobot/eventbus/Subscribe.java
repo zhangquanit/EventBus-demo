@@ -47,7 +47,8 @@ public @interface Subscribe {
     int priority() default 0;
 
     /**
-     * 监听动作,很多网友多有这样的需求，希望发送的事件对象一样，但是可以设置过滤，类似Intent的Action
+     * 监听动作,很多网友多有这样的需求，可以想广播那样监听指定动作的事件
+     * @note: 设置了actions,事件必须为PostEvent，当post事件时，会拿到PostEvent中的action进行匹配
      * @return
      */
     String[] actions() default {};

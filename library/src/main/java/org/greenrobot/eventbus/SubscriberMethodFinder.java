@@ -272,10 +272,8 @@ class SubscriberMethodFinder {
                 if (existing instanceof Method) {
                     //检测被子类override的方法并抛出异常，如果子类覆写了父类中的订阅方法，则在查找父类中的同名方法时，会抛出异常。
                     if (!checkAddWithMethodSignature((Method) existing, eventType)) {
-                        // Paranoia check
                         throw new IllegalStateException();
                     }
-                    // Put any non-Method object to "consume" the existing Method
                     anyMethodByEventType.put(eventType, this);
                 }
                 return checkAddWithMethodSignature(method, eventType);
