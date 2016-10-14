@@ -26,15 +26,20 @@ public class SubscriberMethod {
     final boolean sticky;
     /** Used for efficient comparison */
     String methodString;
+    String[] actions;//监听动作
 
     public SubscriberMethod(Method method, Class<?> eventType, ThreadMode threadMode, int priority, boolean sticky) {
+        this(method,eventType,threadMode,priority,sticky,null);
+    }
+    public SubscriberMethod(Method method, Class<?> eventType, ThreadMode threadMode, int priority, boolean sticky,String[] actions) {
         this.method = method;
         this.threadMode = threadMode;
         this.eventType = eventType;
         this.priority = priority;
         this.sticky = sticky;
+        this.actions=actions;
     }
-
+   //重写equals，方便List.contains()判断
     @Override
     public boolean equals(Object other) {
         if (other == this) {

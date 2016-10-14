@@ -93,7 +93,7 @@ public class ErrorDialogManager {
                 existingFragment.dismiss();
             }
 
-            DialogFragment errorFragment = (DialogFragment) factory
+            android.support.v4.app.DialogFragment errorFragment = (android.support.v4.app.DialogFragment) factory
                     .prepareErrorFragment(event, finishAfterDialog, argumentsForErrorDialog);
             if (errorFragment != null) {
                 errorFragment.show(fm, TAG_ERROR_DIALOG);

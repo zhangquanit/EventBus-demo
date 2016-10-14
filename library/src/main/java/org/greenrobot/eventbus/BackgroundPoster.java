@@ -18,7 +18,7 @@ package org.greenrobot.eventbus;
 import android.util.Log;
 
 /**
- * Posts events in background.
+ * ThreadModel=BACKGROUND
  * 
  * @author Markus
  */
@@ -34,11 +34,12 @@ final class BackgroundPoster implements Runnable {
         queue = new PendingPostQueue();
     }
 
+    //将事件添加发送队列中
     public void enqueue(Subscription subscription, Object event) {
         PendingPost pendingPost = PendingPost.obtainPendingPost(subscription, event);
-        synchronized (this) {
+        synchronized (this) { //多线程环境
             queue.enqueue(pendingPost);
-            if (!executorRunning) {
+            if (!executorRunning) { //如果当前线程没有开启 则将当前线程放到线程池中执行
                 executorRunning = true;
                 eventBus.getExecutorService().execute(this);
             }
@@ -67,7 +68,7 @@ final class BackgroundPoster implements Runnable {
                 Log.w("Event", Thread.currentThread().getName() + " was interruppted", e);
             }
         } finally {
-            executorRunning = false;
+            executorRunning = false; //线程执行完毕
         }
     }
 

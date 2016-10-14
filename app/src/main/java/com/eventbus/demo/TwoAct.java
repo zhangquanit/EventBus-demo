@@ -14,37 +14,42 @@ import org.greenrobot.eventbus.ThreadMode;
 /**
  * @author 张全
  */
-public class TwoAct extends Activity implements View.OnClickListener{
+public class TwoAct extends Activity implements View.OnClickListener {
     private static final String TAG = "EventBus";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_two);
         findViewById(R.id.result).setVisibility(View.GONE);
         findViewById(R.id.btn_mainThread).setOnClickListener(this);
         findViewById(R.id.btn_postThread).setOnClickListener(this);
         findViewById(R.id.btn_backgroundThread).setOnClickListener(this);
         findViewById(R.id.btn_Async).setOnClickListener(this);
+        findViewById(R.id.btn_Act).setOnClickListener(this);
 
         EventBus.getDefault().register(this);
     }
 
     //-----------------------注册事件 START-------------------
-    @Subscribe(threadMode= ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(Item item) {
-        Log.d(TAG, "TwoAct onEventMainThread: "+item.content+"  curThread="+Thread.currentThread().getName());
+        Log.d(TAG, "TwoAct onEventMainThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
     }
-    @Subscribe(threadMode=ThreadMode.POSTING)
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
     public void onEventPostThread(Item item) {
-        Log.d(TAG, "TwoAct onEventPostThread: "+item.content+"  curThread="+Thread.currentThread().getName());
+        Log.d(TAG, "TwoAct onEventPostThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
     }
-    @Subscribe(threadMode=ThreadMode.BACKGROUND)
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEventBackgroundThread(Item item) {
-        Log.d(TAG, "TwoAct onEventBackgroundThread: "+item.content+"  curThread="+Thread.currentThread().getName());
+        Log.d(TAG, "TwoAct onEventBackgroundThread: " + item.content + "  curThread=" + Thread.currentThread().getName());
     }
-    @Subscribe(threadMode=ThreadMode.ASYNC)
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
     public void onEventAsync(Item item) {
-        Log.d(TAG, "TwoAct onEventAsync: "+item.content+"  curThread="+Thread.currentThread().getName());
+        Log.d(TAG, "TwoAct onEventAsync: " + item.content + "  curThread=" + Thread.currentThread().getName());
     }
     //-----------------------注册事件 END-------------------
 
@@ -55,8 +60,8 @@ public class TwoAct extends Activity implements View.OnClickListener{
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d(TAG, "post:  curThread="+Thread.currentThread().getName());
-                        EventBus.getDefault().post(new Item("from MainActivity  MainThread"));
+                        Log.d(TAG, "post:  curThread=" + Thread.currentThread().getName());
+                        EventBus.getDefault().postSticky(new Item("from TwoAct  MainThread"));
                     }
                 }).start();
 
@@ -65,16 +70,18 @@ public class TwoAct extends Activity implements View.OnClickListener{
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d(TAG, "post:  curThread="+Thread.currentThread().getName());
-                        EventBus.getDefault().post(new Item("from MainActivity  PostThread"));
+                        Log.d(TAG, "post:  curThread=" + Thread.currentThread().getName());
+                        EventBus.getDefault().post(new Item("from TwoAct  PostThread"));
                     }
                 }).start();
                 break;
             case R.id.btn_backgroundThread:
-                EventBus.getDefault().post(new Item("from MainActivity  BackgroundThread"));
+                EventBus.getDefault().post(new Item("from TwoAct  BackgroundThread"));
                 break;
             case R.id.btn_Async:
-                EventBus.getDefault().post(new Item("from MainActivity  Async"));
+                EventBus.getDefault().post(new Item("from TwoAct  Async"));
+                break;
+            case R.id.btn_Act:
                 break;
         }
     }

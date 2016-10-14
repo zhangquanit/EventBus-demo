@@ -23,8 +23,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Creates EventBus instances with custom parameters and also allows to install a custom default EventBus instance.
- * Create a new builder using {@link EventBus#builder()}.
+ * EventBus构建器
+ * 单列
  */
 public class EventBusBuilder {
     private final static ExecutorService DEFAULT_EXECUTOR_SERVICE = Executors.newCachedThreadPool();

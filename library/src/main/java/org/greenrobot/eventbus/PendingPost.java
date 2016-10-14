@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 final class PendingPost {
-    private final static List<PendingPost> pendingPostPool = new ArrayList<PendingPost>();
+    private final static List<PendingPost> pendingPostPool = new ArrayList<PendingPost>(); //对象池,池中的对象都是初始化状态
 
     Object event;
     Subscription subscription;
-    PendingPost next;
+    PendingPost next; //下一个
 
     private PendingPost(Object event, Subscription subscription) {
         this.event = event;
@@ -34,20 +34,23 @@ final class PendingPost {
         synchronized (pendingPostPool) {
             int size = pendingPostPool.size();
             if (size > 0) {
-                PendingPost pendingPost = pendingPostPool.remove(size - 1);
+                PendingPost pendingPost = pendingPostPool.remove(size - 1);//从对象池中拿到最后一个
                 pendingPost.event = event;
                 pendingPost.subscription = subscription;
                 pendingPost.next = null;
                 return pendingPost;
             }
         }
-        return new PendingPost(event, subscription);
+        return new PendingPost(event, subscription); //当对象池中的对象不够用时，创建一个对象
     }
 
     static void releasePendingPost(PendingPost pendingPost) {
+        //还原对象状态，方便复用
         pendingPost.event = null;
         pendingPost.subscription = null;
         pendingPost.next = null;
+
+        //放到对象池中
         synchronized (pendingPostPool) {
             // Don't let the pool grow indefinitely
             if (pendingPostPool.size() < 10000) {

@@ -22,6 +22,10 @@ final class Subscription {
      * Becomes false as soon as {@link EventBus#unregister(Object)} is called, which is checked by queued event delivery
      * {@link EventBus#invokeSubscriber(PendingPost)} to prevent race conditions.
      */
+    /*
+    标识该事件是否有效，当EventBus#unregister(Object)调用时，会注销订阅者类中的所有订阅方法，当取消的时候，有可能正在回调该订阅
+    方法，所以需要检查该标识
+     */
     volatile boolean active;
 
     Subscription(Object subscriber, SubscriberMethod subscriberMethod) {
@@ -29,7 +33,7 @@ final class Subscription {
         this.subscriberMethod = subscriberMethod;
         active = true;
     }
-
+    //重写equals，方便List.contains()判断
     @Override
     public boolean equals(Object other) {
         if (other instanceof Subscription) {

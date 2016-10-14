@@ -17,7 +17,8 @@ package org.greenrobot.eventbus;
 
 
 /**
- * Posts events in background.
+ * ThreadNodel=ASYNC
+ * 每次开启一个独立线程来执行事件
  * 
  * @author Markus
  */
@@ -34,7 +35,7 @@ class AsyncPoster implements Runnable {
     public void enqueue(Subscription subscription, Object event) {
         PendingPost pendingPost = PendingPost.obtainPendingPost(subscription, event);
         queue.enqueue(pendingPost);
-        eventBus.getExecutorService().execute(this);
+        eventBus.getExecutorService().execute(this); //直接放入线程池中执行
     }
 
     @Override
